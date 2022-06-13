@@ -16,8 +16,7 @@ export const fetchHousingBracketOption = createAsyncThunk(
 
 export const PostHousingBracketOption = createAsyncThunk('posthousingbracketoption/post',
 async (data) =>{
-    const res = await axios.post('/api/housingbracketoptiondata',data) 
-    console.log(data)
+    await axios.post('/api/housingbracketoptiondata',data) 
 }
 )
 
@@ -26,7 +25,7 @@ export const DeleteHoisingBracketOption = createAsyncThunk('housingbracketoption
 
 async(id)=>{
     console.log(id)
-    const res = await axios.put('/api/housingbracketoptiondatadelete',{id})
+     await axios.put('/api/housingbracketoptiondatadelete',{id})
     
 })
 
@@ -44,11 +43,16 @@ async (id)=>{
 
 export const HousingBracketOptionUpdate = createAsyncThunk('housingbracketoption/update',
 async (data)=>{
-    const datas = await axios.put('/api/housingbracketoptiondata',{data})
+  await axios.put('/api/housingbracketoptiondata',{data})
 }
 )
 
-
+export const getSearch = createAsyncThunk('getsearch',
+    async (search) => {
+   const {data} = await axios.get(`/api/gsearch?searchQ=${search}`)
+        return data
+ }
+)
 
 // initial state 
 
@@ -77,7 +81,7 @@ const HousingBracketOptionSlice = createSlice({
            state.data.push(action.payload);
        })
        .addCase(fetchHousingBracketOption.rejected,(state,action)=>{
-           state.loading = false,
+           state.loading = false;
            state.error = action.payload
        })
        .addCase(DeleteHoisingBracketOption.fulfilled,(state,action)=>{
@@ -99,6 +103,15 @@ const HousingBracketOptionSlice = createSlice({
            state.loading = false;
            
        })
+       .addCase(getSearch.pending, (state, action) => {
+        state.loading = true
+        state.data =[]
+        
+    })
+    .addCase(getSearch.fulfilled, (state, action) => {
+        state.data.push(action.payload)
+        state.loading = false;
+})
        
    }
 

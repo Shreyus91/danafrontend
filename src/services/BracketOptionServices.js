@@ -10,8 +10,8 @@ export const PostBracketOptionData = createAsyncThunk('/bracketoption/post', asy
 
 // get bracket option data
 
-export const GetBracketOptionData = createAsyncThunk('bracketoption/get', async () => {
-    const {data} = await axios.get('/api/bracketoptiondata')
+export const GetBracketOptionData = createAsyncThunk('bracketoption/get', async (page) => {
+    const {data} = await axios.get(`/api/bracketoptiondata?Pages=${page}`)
 
     return data
 
@@ -38,6 +38,14 @@ export const DeleteBracketOptionData = createAsyncThunk('bracketoption/delete', 
     await axios.put('/api/bracketoptiondatadelete',{id})
 })
 
+export const getbSearch = createAsyncThunk('getbSearch',
+    async (search) => {
+   const {data} = await axios.get(`/api/csearch?searchQ=${search}`)
+        console.log(data)
+        return data
+ }
+)
+
 // initialState
 
 const initialState = {
@@ -58,12 +66,13 @@ const BracketOptionSlice = createSlice({
             
         })
             .addCase(GetBracketOptionData.fulfilled, (state, action) => {
+                state.data = [];
                 state.loading = false;
                 state.data.push(action.payload)
             })
             .addCase(GetBracketOptionData.rejected, (state, action) => {
-                state.loading = false,
-                state.error = action.payload
+                state.loading = false;
+                state.error = action.payload;
             }).addCase(GetSingleBracketOptionData.pending, (state, action) => {
             state.loading = true
             })
@@ -74,6 +83,15 @@ const BracketOptionSlice = createSlice({
             .addCase(GetSingleBracketOptionData.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload
+            })
+            .addCase(getbSearch.pending, (state, action) => {
+                state.loading = true
+                state.data =[]
+                
+            })
+            .addCase(getbSearch.fulfilled, (state, action) => {
+                state.data.push(action.payload)
+                state.loading = false;
         })
     }
 

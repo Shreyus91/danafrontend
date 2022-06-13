@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { DeleteHoisingBracketOption, HousingBracketOptionUpdate, PostHousingBracketOption } from "../../services/HousingBracketOptionService";
-import { TrackWidthAddData, TrackWidthDelete, TrackWidthUpdate } from "../../services/TracwidthService";
 import './Modal.css'
 const HousingBracketOptionModal = ({
   id,
@@ -12,7 +11,7 @@ const HousingBracketOptionModal = ({
 }) => {
     const [PartNo,setPartNo] = useState('')
     const [BracketOption,setBracketOption] = useState('')
-  const { loading,data,success,singleData } = useSelector((state) => state.HousingBracketOptionReducer);
+  const { singleData } = useSelector((state) => state.HousingBracketOptionReducer);
   
   const housingbodata = { ...singleData };
   const [datatarget, setDataTarget] = useState({ ...housingbodata.data });
@@ -37,13 +36,13 @@ const HousingBracketOptionModal = ({
   return (
     <div id="myModal" className="modal">
       <div className="modal-content">
-        <span className="close" onClick={() => {setModal(false), setShowdeleteModal(false)  }}>
+        <span className="close" onClick={() => { setModal(false); setShowdeleteModal(false)  }}>
           &times;
         </span>
         {showDeleteModal ? <div>
           <div>Do You Really Want To delete?</div>
           <button onClick={(e)=> deleteHandler(e,id)} >Yes</button>
-          <button onClick={() => {setModal(false), setShowdeleteModal(false)}} >No</button>
+          <button onClick={() => { setModal(false); setShowdeleteModal(false)}} >No</button>
         </div>:<form >
            <div>
           { updateState?

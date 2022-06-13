@@ -33,7 +33,7 @@ const BuildSheetModal = ({
   const [ChkBy, setChkBy] = useState("");
   const [RevDate, setRevDate] = useState("");
   const [BracketDrawingNumber, setBracketDrawingNumber] = useState("");
-  const { loading, data, success, singleData } = useSelector(
+  const { singleData } = useSelector(
     (state) => state.BuilSheetReducer
   );
 
@@ -136,7 +136,7 @@ const BuildSheetModal = ({
         <span
           className="close"
           onClick={() => {
-            setModal(false), setShowdeleteModal(false);
+            setModal(false); setShowdeleteModal(false);
           }}
         >
           &times;
@@ -147,7 +147,7 @@ const BuildSheetModal = ({
             <button onClick={(e) => deleteHandler(e, id)}>Yes</button>
             <button
               onClick={() => {
-                setModal(false), setShowdeleteModal(false);
+                setModal(false); setShowdeleteModal(false);
               }}
             >
               No

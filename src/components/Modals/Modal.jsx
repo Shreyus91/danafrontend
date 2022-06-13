@@ -40,13 +40,13 @@ const Modal = ({
   return (
     <div id="myModal" className="modal">
       <div className="modal-content">
-        <span className="close" onClick={() => {setShowModal(false), setShowDeleteModal(false)}}>
+        <span className="close" onClick={() => { setShowModal(false); setShowDeleteModal(false)}}>
           &times;
         </span>
         {showdeletemodal ? <div>
           <div>Do You Really Want To delete?</div>
           <button onClick={()=> deleteHandler(id)} >Yes</button>
-          <button onClick={() => {setShowModal(false), setShowDeleteModal(false)}} >No</button>
+          <button onClick={() => { setShowModal(false); setShowDeleteModal(false)}} >No</button>
         </div>:<form>
           <div>
             {addState ? (

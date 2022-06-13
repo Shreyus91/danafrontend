@@ -5,8 +5,9 @@ import { Provider } from 'react-redux'
 import store from './store'
 import {
     BrowserRouter,
-    Switch,
-    Route
+    
+    Route,
+    Routes
     
     
   } from "react-router-dom";
@@ -20,56 +21,67 @@ import BracketOptionTable from './components/Tables/BracketOptionTable'
 import BareDrawingNumberTable from './components/Tables/BareDrawingNumberTable'
 import AbsTable from './components/Tables/AbsTable'
 import BuildSheetTable from './components/Tables/BuildSheetTable'
+import Login from './components/User/Login'
+import Protected from './components/Protected'
+import EditTable from './components/EditTable/EditTable'
 
 ReactDOM.render(
     <Provider store={store}>
         <BrowserRouter>
-            <Switch>
-                <Route exact path='/'>
-                        <App/>
+            <Routes>
+            <Route path='/' element={<Login/>}>
+                        
                 </Route>
-                <Route exact   path='/newbuildsheet'
-                >
-                    <NewBuildSheetData/>
+                <Route path='app' element={<App/>}>
+                        
                 </Route>
-                <Route exact   path='/tracktable'
+                <Route   path='newbuildsheet' element={<Protected Component={NewBuildSheetData }/>}
                 >
-                    <TrackTable/>
+                    
                 </Route>
-                <Route exact   path='/housingbracketoptiontable'
+                <Route    path='tracktable' element={ <Protected Component={TrackTable }/>}
                 >
-                    <HousingBracketOptionTable/>
+                   
                 </Route>
-                <Route exact   path='/halfotiontable'
+                <Route    path='housingbracketoptiontable' element={ <Protected Component={HousingBracketOptionTable }/>}
                 >
-                    <HalfOptionTable/>
+                    
                 </Route>
-                <Route exact   path='/dowelltable'
+                <Route    path='halfotiontable' element={ <Protected Component={HalfOptionTable }/>}
+                
                 >
-                    <DowellTable/>
+                   
                 </Route>
-                <Route exact   path='/brkflgoption'
+                <Route    path='/dowelltable' element={ <Protected Component={DowellTable }/>} 
                 >
-                    <BrkFlgOptionTable/>
+                   
                 </Route>
-                <Route exact   path='/bracketoptiontable'
+                <Route exact   path='brkflgoption' element={ <Protected Component={BrkFlgOptionTable }/>}
                 >
-                    <BracketOptionTable/>
+                    
                 </Route>
-                <Route exact   path='/baredrawingnumber'
+            <Route exact   path='bracketoptiontable' element={ <Protected Component={BracketOptionTable }/>}
                 >
-                    <BareDrawingNumberTable/>
+                    
                 </Route>
-                <Route exact   path='/abstable'
+        <Route exact   path='baredrawingnumber' element={ <Protected Component={BareDrawingNumberTable }/>}
                 >
-                    <AbsTable/>
+                    
                 </Route>
-                <Route exact   path='/buildsheettable'
+                <Route exact   path='abstable' element={ <Protected Component={AbsTable }/>}
                 >
-                    <BuildSheetTable/>
+                   
+                </Route>
+                <Route    path='buildsheettable' element={ <Protected Component={BuildSheetTable }/>}
+                >
+                    
+                </Route>
+                <Route    path='edittable' element={ <Protected Component={EditTable }/>}
+                >
+                    
                 </Route>
 
-        </Switch>
+        </Routes>
         </BrowserRouter>
     
 

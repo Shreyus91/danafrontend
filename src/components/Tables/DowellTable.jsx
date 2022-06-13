@@ -1,18 +1,26 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { GetDowellData, SingleDowellData } from '../../services/DowellService'
-import DowellModal from '../Modals/DowellModal'
 
+import { GetDowellData, getSearch, increment, SingleDowellData } from '../../services/DowellService'
+import DowellModal from '../Modals/DowellModal'
+import Pagination from '@mui/material/Pagination';
 const DowellTable = () => {
+  
+  const [page, setPage] = useState(1);
+  const handleChange = (event, value) => {
+    setPage(value)
+  };
     const [modal, setModal] = useState(false)
     const [ids, setIds] = useState()
+    const [search, setSearch] = useState('')
     const [showDeleteModal, setShowdeleteModal] = useState(false)
     const [updateState,setUpdateState] = useState(false)
     const dispatch = useDispatch()
-    const {loading,data} = useSelector((state)=> state.DowellReducer)
-    useEffect(() => {
-        dispatch(GetDowellData())
-    }, [])
+    const {loading,data,skipCount} = useSelector((state)=> state.DowellReducer)
+    localStorage.setItem('page',page)
+  useEffect(() => {
+        dispatch(GetDowellData(page))
+    }, [page])
     
 
     const AddDataHandler = () => {
@@ -32,17 +40,22 @@ const DowellTable = () => {
         setUpdateState(true)
         setModal(true)
     }
-
+  const handleSearch = () => {
+   dispatch(getSearch(search))
+ }
     
     if (loading) {
         return <div>Loading..</div>
     }
-    if (data) {
+  if (data) {
+    console.log(page)
         return (
             <div>
-
+              <Pagination page={page} onChange={handleChange} count={3}/>
+              
             <button onClick={() => AddDataHandler()}>Add Data</button>
-            
+            <input type="text" value={search} onChange={(e) => setSearch(e.target.value)} placeholder="search"></input>
+            <button onClick={()=>handleSearch()}>Search</button>
             <table>
                       <tr>
                         <th>Dowell</th>
@@ -81,7 +94,7 @@ const DowellTable = () => {
                     </tr>
                 </React.Fragment>)
             
-            }
+              }
             {
               modal?<DowellModal id={ids} setModal={setModal} showDeleteModal={showDeleteModal} setShowdeleteModal={setShowdeleteModal} updateState={updateState} setUpdateState={setUpdateState} ></DowellModal>:<div></div>
             }

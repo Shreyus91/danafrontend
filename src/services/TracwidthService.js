@@ -60,6 +60,13 @@ export const TrackWidthDelete = createAsyncThunk(
   }
 );
 
+export const getSearch = createAsyncThunk('getsearch',
+    async (search) => {
+   const {data} = await axios.get(`/api/isearch?searchQ=${search}`)
+        return data
+ }
+)
+
 // initial State
 const initialState = {
   data: [],
@@ -106,6 +113,15 @@ const TrackWidthSlice = createSlice({
           state.loading = false;
           state.error.push(action.payload);
         })
+        .addCase(getSearch.pending, (state, action) => {
+          state.loading = true
+          state.data =[]
+          
+      })
+      .addCase(getSearch.fulfilled, (state, action) => {
+          state.data.push(action.payload)
+          state.loading = false;
+  })
   },
 });
 

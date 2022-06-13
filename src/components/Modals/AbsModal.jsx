@@ -19,7 +19,7 @@ const AbsModal = ({
   const [Block, setBlock] = useState("");
   const [BlIndex, setBlIndex] = useState("");
   const [SOFf, setSOFf] = useState("");
-  const { loading, data, success, singleData } = useSelector(
+  const {  singleData } = useSelector(
     (state) => state.ABsReducer
   );
 
@@ -46,7 +46,7 @@ const AbsModal = ({
         <span
           className="close"
           onClick={() => {
-            setModal(false), setShowdeleteModal(false);
+            setModal(false); setShowdeleteModal(false);
           }}
         >
           &times;
@@ -57,7 +57,7 @@ const AbsModal = ({
             <button onClick={(e) => deleteHandler(e, id)}>Yes</button>
             <button
               onClick={() => {
-                setModal(false), setShowdeleteModal(false);
+                setModal(false); setShowdeleteModal(false);
               }}
             >
               No

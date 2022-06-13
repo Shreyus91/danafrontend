@@ -4,8 +4,8 @@ import axios from "axios";
 
 // get Brake Flange option data
 
-export const GetBrkFlgOptionData = createAsyncThunk('/getflangeoption/data', async () => {
-    const { data } = await axios.get('/api/brkflgoptiondata')
+export const GetBrkFlgOptionData = createAsyncThunk('/getflangeoption/data', async (page) => {
+    const { data } = await axios.get('/api/brkflgoptiondata?Pages=${page}')
     return data
 })
 
@@ -34,7 +34,13 @@ export const SingleBrkFlgOption = createAsyncThunk('brkoption/single', async (id
 export const DeleteBrkFlgOption = createAsyncThunk('brkoption/delete', async (id) => {
     await axios.put('/api/brkflgoptiondatadelete',{id})
 })
-
+export const getcSearch = createAsyncThunk('getcSearch',
+    async (search) => {
+   const {data} = await axios.get(`/api/dsearch?searchQ=${search}`)
+        console.log(data)
+        return data
+ }
+)
 // initialState
 const initialState = {
     data: [],
@@ -58,8 +64,8 @@ const BrkFlgOptionSlice = createSlice({
                 state.data.push(action.payload)
             })
             .addCase(GetBrkFlgOptionData.rejected, (state, action) => {
-                state.loading = false,
-                state.error = action.payload
+                state.loading = false;
+                state.error = action.payload;
             }).addCase(SingleBrkFlgOption.pending, (state, action) => {
             state.loading = true
             })
@@ -70,6 +76,15 @@ const BrkFlgOptionSlice = createSlice({
             .addCase(SingleBrkFlgOption.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload
+            })
+            .addCase(getcSearch.pending, (state, action) => {
+                state.loading = true
+                state.data =[]
+                
+            })
+            .addCase(getcSearch.fulfilled, (state, action) => {
+                state.data.push(action.payload)
+                state.loading = false;
         })
     }
 })

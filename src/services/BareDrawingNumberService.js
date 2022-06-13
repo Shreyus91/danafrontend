@@ -12,8 +12,8 @@ export const postBareDrawingNumberData = createAsyncThunk('baredrawingNumber/pos
 
 // get all bare drawing number data
 
-export const getAllBareDrawingNumberData = createAsyncThunk('baredrawingnumber/getAll', async () => {
-    const {data} = await axios.get(`${apiAddress}`)
+export const getAllBareDrawingNumberData = createAsyncThunk('baredrawingnumber/getAll', async (page) => {
+    const {data} = await axios.get(`${apiAddress}?Pages=${page}`)
     return data
 })
 
@@ -37,6 +37,14 @@ export const DeleteBareDrawingNumberData = createAsyncThunk('baredrawing/delete'
     await axios.put(`${apiAddress}delete`,{id})
 })
 
+export const getaSearch = createAsyncThunk('getaSearch',
+    async (search) => {
+   const {data} = await axios.get(`/api/bsearch?searchQ=${search}`)
+        console.log(data)
+        return data
+ }
+)
+
 const initialState = {
     data: [],
     loading: true,
@@ -55,12 +63,13 @@ const BareDrawingNumberSlice = createSlice({
             
         })
             .addCase(getAllBareDrawingNumberData.fulfilled, (state, action) => {
+                state.data = [];
                 state.loading = false;
                 state.data.push(action.payload)
             })
             .addCase(getAllBareDrawingNumberData.rejected, (state, action) => {
-                state.loading = false,
-                state.error = action.payload
+                state.loading = false;
+                state.error = action.payload;
             }).addCase(GetSingleBareDrawingNumberData.pending, (state, action) => {
             state.loading = true
             })
@@ -71,6 +80,15 @@ const BareDrawingNumberSlice = createSlice({
             .addCase(GetSingleBareDrawingNumberData.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload
+            })
+            .addCase(getaSearch.pending, (state, action) => {
+                state.loading = true
+                state.data =[]
+                
+            })
+            .addCase(getaSearch.fulfilled, (state, action) => {
+                state.data.push(action.payload)
+                state.loading = false;
         })
     }
 

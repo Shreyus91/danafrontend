@@ -37,6 +37,16 @@ export const Deleteabs = createAsyncThunk('abs/delete', async (id) => {
     await axios.put(`${apiAddress}delete`,{id})
 })
 
+// search call
+
+export const getSearch = createAsyncThunk('getsearch',
+    async (search) => {
+   const {data} = await axios.get(`/api/asearch?searchQ=${search}`)
+        console.log(data)
+        return data
+ }
+)
+
 const initialState = {
     data: [],
     loading: true,
@@ -59,8 +69,8 @@ const absSlice = createSlice({
                 state.data.push(action.payload)
             })
             .addCase(getAllabs.rejected, (state, action) => {
-                state.loading = false,
-                state.error = action.payload
+                state.loading = false;
+                state.error = action.payload;
             }).addCase(GetSingleabs.pending, (state, action) => {
             state.loading = true
             })
@@ -71,6 +81,15 @@ const absSlice = createSlice({
             .addCase(GetSingleabs.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload
+            })
+            .addCase(getSearch.pending, (state, action) => {
+                state.loading = true
+                state.data =[]
+                
+            })
+            .addCase(getSearch.fulfilled, (state, action) => {
+                state.data.push(action.payload)
+                state.loading = false;
         })
     }
 

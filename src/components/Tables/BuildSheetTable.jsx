@@ -1,9 +1,15 @@
 import React, { useEffect, useState } from 'react'
+import Pagination from '@mui/material/Pagination';
 import { useDispatch, useSelector } from 'react-redux'
-import { getAllBuildSheetData, GetSingleBuildSheetData } from '../../services/BuildSheetService'
+import { getAllBuildSheetData, geteSearch, GetSingleBuildSheetData } from '../../services/BuildSheetService'
 import BuildSheetModal from '../Modals/BuildSheetModal'
 
 const BuildSheetTable = () => {
+  const [page, setPage] = useState(1);
+  const handleChange = (event, value) => {
+    setPage(value)
+  };
+  const [search, setSearch] = useState('')
     const [modal, setModal] = useState(false)
     const [ids, setIds] = useState()
     const [showDeleteModal, setShowdeleteModal] = useState(false)
@@ -11,8 +17,8 @@ const BuildSheetTable = () => {
     const dispatch = useDispatch()
     const {loading,data} = useSelector((state)=> state.BuilSheetReducer)
     useEffect(() => {
-        dispatch(getAllBuildSheetData())
-    }, [])
+        dispatch(getAllBuildSheetData(page))
+    }, [page])
     
 
     const AddDataHandler = () => {
@@ -33,15 +39,25 @@ const BuildSheetTable = () => {
         setModal(true)
     }
 
-    
+    const handleSearch = () => {
+      dispatch(geteSearch(search))
+    }
     if (loading) {
         return <div>Loading..</div>
     }
     if (data) {
         return (
             <div>
+<Pagination page={page} onChange={handleChange} count={3} />
 
-            <button onClick={() => AddDataHandler()}>Add Data</button>
+<button onClick={() => AddDataHandler()}>Add Data</button>
+<input
+  type="text"
+  value={search}
+  onChange={(e) => setSearch(e.target.value)}
+  placeholder="search"
+></input>
+<button onClick={() => handleSearch()}>Search</button>
             
             <table>
                       <tr>

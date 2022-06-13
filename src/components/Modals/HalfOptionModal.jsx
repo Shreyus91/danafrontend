@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { HalfOptionDeletedata, PostHalfOptionData, UpdateHalfOptionData } from '../../services/HalfOptionServices';
-import { HousingBracketOptionUpdate } from '../../services/HousingBracketOptionService';
 
 const HalfOptionModal = ({id,
     setModal,
@@ -12,7 +11,7 @@ const HalfOptionModal = ({id,
     const dispatch = useDispatch()
     const [HalfOption, setHalfOption] = useState('')
     const [Wall,setWall] = useState('')
-    const {loading,data,success,singleData} = useSelector(state=> state.HalfOptionReducer)
+    const {singleData} = useSelector(state=> state.HalfOptionReducer)
     
     const halfoptionsingledata = {...singleData}
     const [datatarget,setDataTarget] = useState({...halfoptionsingledata.data})
@@ -40,13 +39,13 @@ const HalfOptionModal = ({id,
   return (
     <div id="myModal" className="modal">
     <div className="modal-content">
-      <span className="close" onClick={() => {setModal(false), setShowdeleteModal(false)  }}>
+        <span className="close" onClick={() => { setModal(false); setShowdeleteModal(false)  }}>
         &times;
       </span>
       {showDeleteModal ? <div>
         <div>Do You Really Want To delete?</div>
         <button onClick={(e)=> deleteHandler(e,id)} >Yes</button>
-        <button onClick={() => {setModal(false), setShowdeleteModal(false)}} >No</button>
+          <button onClick={() => { setModal(false); setShowdeleteModal(false)}} >No</button>
       </div>:<form >
          <div>
         { updateState?

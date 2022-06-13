@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { getAllabs, GetSingleabs } from '../../services/AbsServices'
+import { getAllabs, getSearch, GetSingleabs } from '../../services/AbsServices'
 import AbsModal from '../Modals/AbsModal'
 
 const AbsTable = () => {
+  const [search,setSearch] = useState('')
     const [modal, setModal] = useState(false)
     const [ids, setIds] = useState()
     const [showDeleteModal, setShowdeleteModal] = useState(false)
@@ -33,6 +34,9 @@ const AbsTable = () => {
         setModal(true)
     }
 
+  const handleSearch = () => {
+    dispatch(getSearch(search))
+  }
     
     if (loading) {
         return <div>Loading..</div>
@@ -42,6 +46,8 @@ const AbsTable = () => {
             <div>
 
             <button onClick={() => AddDataHandler()}>Add Data</button>
+            <input type="text" value={search} onChange={(e) => setSearch(e.target.value)} placeholder="search"></input>
+            <button onClick={()=>handleSearch()}>search</button>
             
             <table>
                       <tr>

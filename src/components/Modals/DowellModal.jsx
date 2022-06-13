@@ -14,7 +14,7 @@ const DowellModal = ({
   const [DowelPN, setDowelPN] = useState("");
   const [FTOff, setFTOff] = useState("");
   const [Spacing, setSpacing] = useState("");
-  const { loading, data, success, singleData } = useSelector(
+  const {  singleData } = useSelector(
     (state) => state.DowellReducer
   );
 
@@ -41,7 +41,7 @@ const DowellModal = ({
         <span
           className="close"
           onClick={() => {
-            setModal(false), setShowdeleteModal(false);
+            setModal(false); setShowdeleteModal(false);
           }}
         >
           &times;
@@ -52,7 +52,7 @@ const DowellModal = ({
             <button onClick={(e) => deleteHandler(e, id)}>Yes</button>
             <button
               onClick={() => {
-                setModal(false), setShowdeleteModal(false);
+                setModal(false); setShowdeleteModal(false);
               }}
             >
               No

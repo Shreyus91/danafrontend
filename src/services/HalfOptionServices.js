@@ -15,7 +15,7 @@ export const GetHalfOption = createAsyncThunk('HalfOption/get',
 
 export const PostHalfOptionData = createAsyncThunk('HalfOption/post',
     async (data) => {
-    const res = await axios.post('/api/hafoptiondata',{data})
+    await axios.post('/api/hafoptiondata',{data})
     })
 
 
@@ -43,8 +43,15 @@ export const SingleHalfOptionData = createAsyncThunk('halfoptionsingle/data',
 
 export const HalfOptionDeletedata = createAsyncThunk('halfoption/delete',
     async (id) => {
-    const data = await axios.put('/api/hafoptiondatadelete',{id})
+     await axios.put('/api/hafoptiondatadelete',{id})
 }
+)
+
+export const getSearch = createAsyncThunk('getsearch',
+    async (search) => {
+   const {data} = await axios.get(`/api/fsearch?searchQ=${search}`)
+        return data
+ }
 )
 
 
@@ -72,8 +79,8 @@ const HalfOptionSlice = createSlice({
                 state.data.push(action.payload)
             })
             .addCase(GetHalfOption.rejected, (state, action) => {
-                state.loading = false,
-                state.error = action.payload
+                state.loading = false;
+                state.error = action.payload;
             }).addCase(SingleHalfOptionData.pending, (state, action) => {
             state.loading = true
             })
@@ -84,6 +91,15 @@ const HalfOptionSlice = createSlice({
             .addCase(SingleHalfOptionData.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload
+            })
+            .addCase(getSearch.pending, (state, action) => {
+                state.loading = true
+                state.data =[]
+                
+            })
+            .addCase(getSearch.fulfilled, (state, action) => {
+                state.data.push(action.payload)
+                state.loading = false;
         })
     }
         

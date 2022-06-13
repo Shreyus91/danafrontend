@@ -8,7 +8,8 @@ import { DowellSliceReducer } from "./services/DowellService";
 import { HalfOptionSliceReducer } from "./services/HalfOptionServices";
 import {  housingbracketoptionSliceReducer } from "./services/HousingBracketOptionService";
 import {  TrackWidthSliceReducer } from "./services/TracwidthService";
-
+import { LoginSliceReducer } from "./services/userServices";
+import rootreducer from './services/DowellService'
 const store = configureStore({
     reducer: {
         TracWidthReducer: TrackWidthSliceReducer, HousingBracketOptionReducer: housingbracketoptionSliceReducer,
@@ -18,7 +19,9 @@ const store = configureStore({
         BracketOptionReducer: BracketOptionSliceReducer,
         BareDrawingReducer: BareDrawingNumberSliceReducer,
         ABsReducer: absSliceReducer,
-        BuilSheetReducer:BuildSheetSliceReducer
+        BuilSheetReducer: BuildSheetSliceReducer,
+        userReducer: LoginSliceReducer,
+        reducer:rootreducer
     },
 
 })

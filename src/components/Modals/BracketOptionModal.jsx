@@ -17,7 +17,7 @@ const BracketOptionModal = ({
   const [TRod, setTRod] = useState("");
   const [SArm, setSArm] = useState("");
   const [LArm, setLArm] = useState("");
-  const { loading, data, success, singleData } = useSelector(
+  const {  singleData } = useSelector(
     (state) => state.BracketOptionReducer
   );
 
@@ -44,7 +44,7 @@ const BracketOptionModal = ({
         <span
           className="close"
           onClick={() => {
-            setModal(false), setShowdeleteModal(false);
+            setModal(false); setShowdeleteModal(false);
           }}
         >
           &times;
@@ -55,7 +55,7 @@ const BracketOptionModal = ({
             <button onClick={(e) => deleteHandler(e, id)}>Yes</button>
             <button
               onClick={() => {
-                setModal(false), setShowdeleteModal(false);
+                setModal(false); setShowdeleteModal(false);
               }}
             >
               No

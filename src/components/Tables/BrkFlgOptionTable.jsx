@@ -1,9 +1,15 @@
 import React, { useEffect, useState } from 'react'
+import Pagination from '@mui/material/Pagination';
 import { useDispatch, useSelector } from 'react-redux'
-import { GetBrkFlgOptionData, SingleBrkFlgOption } from '../../services/BrkFlgOptionService'
+import { GetBrkFlgOptionData, getcSearch, SingleBrkFlgOption } from '../../services/BrkFlgOptionService'
 import BrkFlgOptionModal from '../Modals/BrkFlgOptionModal'
 
 const BrkFlgOptionTable = () => {
+  const [page, setPage] = useState(1);
+  const handleChange = (event, value) => {
+    setPage(value)
+  };
+  const [search, setSearch] = useState('')
     const [modal, setModal] = useState(false)
     const [ids, setIds] = useState()
     const [showDeleteModal, setShowdeleteModal] = useState(false)
@@ -11,8 +17,8 @@ const BrkFlgOptionTable = () => {
     const dispatch = useDispatch()
     const {loading,data} = useSelector((state)=> state.BrkFlgReducer)
     useEffect(() => {
-        dispatch(GetBrkFlgOptionData())
-    }, [])
+        dispatch(GetBrkFlgOptionData(page))
+    }, [page])
     
 
     const AddDataHandler = () => {
@@ -31,7 +37,11 @@ const BrkFlgOptionTable = () => {
         dispatch(SingleBrkFlgOption(id))
         setUpdateState(true)
         setModal(true)
-    }
+  }
+  
+  const handleSearch = () => {
+    dispatch(getcSearch(search))
+  }
 
     
     if (loading) {
@@ -41,7 +51,16 @@ const BrkFlgOptionTable = () => {
         return (
             <div>
 
-            <button onClick={() => AddDataHandler()}>Add Data</button>
+<Pagination page={page} onChange={handleChange} count={3} />
+
+<button onClick={() => AddDataHandler()}>Add Data</button>
+<input
+  type="text"
+  value={search}
+  onChange={(e) => setSearch(e.target.value)}
+  placeholder="search"
+></input>
+<button onClick={() => handleSearch()}>Search</button>
             
             <table>
                       <tr>

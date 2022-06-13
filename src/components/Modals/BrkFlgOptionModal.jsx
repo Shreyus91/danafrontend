@@ -19,7 +19,7 @@ const BrkFlgOptionModal = ({
   const [Index, setIndex] = useState("");
   const [Size, setSize] = useState("");
   const [Num, setNum] = useState("");
-  const { loading, data, success, singleData } = useSelector(
+  const {  singleData } = useSelector(
     (state) => state.BrkFlgReducer
   );
 
@@ -46,7 +46,7 @@ const BrkFlgOptionModal = ({
         <span
           className="close"
           onClick={() => {
-            setModal(false), setShowdeleteModal(false);
+            setModal(false); setShowdeleteModal(false);
           }}
         >
           &times;
@@ -57,7 +57,7 @@ const BrkFlgOptionModal = ({
             <button onClick={(e) => deleteHandler(e, id)}>Yes</button>
             <button
               onClick={() => {
-                setModal(false), setShowdeleteModal(false);
+                setModal(false); setShowdeleteModal(false);
               }}
             >
               No

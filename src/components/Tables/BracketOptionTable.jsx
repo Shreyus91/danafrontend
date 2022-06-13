@@ -1,10 +1,17 @@
 
 import React, { useEffect, useState } from 'react'
+import Pagination from '@mui/material/Pagination';
 import { useDispatch, useSelector } from 'react-redux'
-import { GetBracketOptionData, GetSingleBracketOptionData } from '../../services/BracketOptionServices'
+import { GetBracketOptionData, getbSearch, GetSingleBracketOptionData } from '../../services/BracketOptionServices'
 import BracketOptionModal from '../Modals/BracketOptionModal'
 
 const BracketOptionTable = () => {
+  const [page, setPage] = useState(1);
+  const handleChange = (event, value) => {
+    setPage(value)
+  };
+  const [search, setSearch] = useState('')
+
     const [modal, setModal] = useState(false)
     const [ids, setIds] = useState()
     const [showDeleteModal, setShowdeleteModal] = useState(false)
@@ -12,8 +19,8 @@ const BracketOptionTable = () => {
     const dispatch = useDispatch()
     const {loading,data} = useSelector((state)=> state.BracketOptionReducer)
     useEffect(() => {
-        dispatch(GetBracketOptionData())
-    }, [])
+        dispatch(GetBracketOptionData(page))
+    }, [page])
     
 
     const AddDataHandler = () => {
@@ -33,7 +40,9 @@ const BracketOptionTable = () => {
         setUpdateState(true)
         setModal(true)
     }
-
+    const handleSearch = () => {
+      dispatch(getbSearch(search))
+    }
     
     if (loading) {
         return <div>Loading..</div>
@@ -42,7 +51,17 @@ const BracketOptionTable = () => {
         return (
             <div>
 
-            <button onClick={() => AddDataHandler()}>Add Data</button>
+<Pagination page={page} onChange={handleChange} count={3} />
+
+<button onClick={() => AddDataHandler()}>Add Data</button>
+<input
+  type="text"
+  value={search}
+  onChange={(e) => setSearch(e.target.value)}
+  placeholder="search"
+></input>
+<button onClick={() => handleSearch()}>Search</button>
+
             
             <table>
                       <tr>
