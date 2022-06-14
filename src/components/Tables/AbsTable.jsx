@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from 'react'
+import Pagination from '@mui/material/Pagination';
 import { useDispatch, useSelector } from 'react-redux'
 import { getAllabs, getSearch, GetSingleabs } from '../../services/AbsServices'
 import AbsModal from '../Modals/AbsModal'
 
 const AbsTable = () => {
+  const [page, setPage] = useState(1);
+  const handleChange = (event, value) => {
+    setPage(value)
+  };
   const [search,setSearch] = useState('')
     const [modal, setModal] = useState(false)
     const [ids, setIds] = useState()
@@ -12,8 +17,8 @@ const AbsTable = () => {
     const dispatch = useDispatch()
     const {loading,data} = useSelector((state)=> state.ABsReducer)
     useEffect(() => {
-        dispatch(getAllabs())
-    }, [])
+        dispatch(getAllabs(page))
+    }, [page])
     
 
     const AddDataHandler = () => {
@@ -44,7 +49,7 @@ const AbsTable = () => {
     if (data) {
         return (
             <div>
-
+               <Pagination page={page} onChange={handleChange} count={3}/>
             <button onClick={() => AddDataHandler()}>Add Data</button>
             <input type="text" value={search} onChange={(e) => setSearch(e.target.value)} placeholder="search"></input>
             <button onClick={()=>handleSearch()}>search</button>

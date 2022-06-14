@@ -1,9 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchHousingBracketOption, HousingBracketOptionSingleData } from '../../services/HousingBracketOptionService'
+import { fetchHousingBracketOption, getSearched, HousingBracketOptionSingleData } from '../../services/HousingBracketOptionService'
 import HousingBracketOptionModal from '../Modals/HousingBracketOptionModal'
+import Pagination from '@mui/material/Pagination';
 
 const HousingBracketOptionTable = () => {
+  const [page, setPage] = useState(1);
+  const handleChange = (event, value) => {
+    setPage(value)
+  };
+
+  const [search, setSearch] = useState('')
+
   const[modal,setModal] = useState(false)
   const [showDeleteModal,setShowdeleteModal] = useState(false)
   const [updateState,setUpdateState] = useState(false)
@@ -11,8 +19,8 @@ const HousingBracketOptionTable = () => {
     const dispatch = useDispatch()
 
     useEffect(()=>{
-        dispatch(fetchHousingBracketOption())
-    },[])
+        dispatch(fetchHousingBracketOption(page))
+    },[page])
 
     const {loading,data} = useSelector((state)=> state.HousingBracketOptionReducer)
 
@@ -36,7 +44,10 @@ const HousingBracketOptionTable = () => {
       setShowdeleteModal(true)
       setIds(id)
     }
-   
+    const handleSearch = () => {
+      dispatch(getSearched(search))
+    }
+      
     if(loading){
         return <div>Loading...</div>
     }
@@ -45,16 +56,17 @@ const HousingBracketOptionTable = () => {
       
   return (
     <div>
-
+<Pagination page={page} onChange={handleChange} count={3}/>
 <button onClick={() => AddDataHandler()}>Add Data</button>
-
+<input type="text" value={search} onChange={(e) => setSearch(e.target.value)} />
+<button onClick={()=>handleSearch()}>Search</button>
 <table>
           <tr>
             <th>PartNo</th>
             <th>BracketOption</th>
           </tr>
 {
-    data[0].meta.map((res)=><React.Fragment key = {res._id}>
+    data[0].data.map((res)=><React.Fragment key = {res._id}>
         <tr>
             <td>
               {res.PartNo}

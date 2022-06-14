@@ -4,8 +4,8 @@ import axios from 'axios'
 
 // get half option data
 export const GetHalfOption = createAsyncThunk('HalfOption/get',
-    async () => {
-        const { data } = await axios.get('/api/hafoptiondata')
+    async (page) => {
+        const { data } = await axios.get(`/api/hafoptiondata?Page=${page}`)
         console.log(data)
         return data
 }
@@ -47,7 +47,7 @@ export const HalfOptionDeletedata = createAsyncThunk('halfoption/delete',
 }
 )
 
-export const getSearch = createAsyncThunk('getsearch',
+export const getmSearch = createAsyncThunk('getmSearch',
     async (search) => {
    const {data} = await axios.get(`/api/fsearch?searchQ=${search}`)
         return data
@@ -72,7 +72,7 @@ const HalfOptionSlice = createSlice({
     extraReducers: (builder) => {
         builder.addCase(GetHalfOption.pending, (state, action) => {
             state.loading = true;
-            
+            state.data = []
         })
             .addCase(GetHalfOption.fulfilled, (state, action) => {
                 state.loading = false;
@@ -92,12 +92,12 @@ const HalfOptionSlice = createSlice({
                 state.loading = false;
                 state.error = action.payload
             })
-            .addCase(getSearch.pending, (state, action) => {
+            .addCase(getmSearch.pending, (state, action) => {
                 state.loading = true
                 state.data =[]
                 
             })
-            .addCase(getSearch.fulfilled, (state, action) => {
+            .addCase(getmSearch.fulfilled, (state, action) => {
                 state.data.push(action.payload)
                 state.loading = false;
         })

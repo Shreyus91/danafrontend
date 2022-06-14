@@ -12,8 +12,8 @@ export const postabs = createAsyncThunk('abs/post',
 
 // get all bare drawing number data
 
-export const getAllabs = createAsyncThunk('abs/getAll', async () => {
-    const {data} = await axios.get(`${apiAddress}`)
+export const getAllabs = createAsyncThunk('abs/getAll', async (page) => {
+    const {data} = await axios.get(`${apiAddress}?Page=${page}`)
     return data
 })
 
@@ -62,9 +62,10 @@ const absSlice = createSlice({
     extraReducers: (builder) => {
         builder.addCase(getAllabs.pending, (state, action) => {
             state.loading = true;
-            
+            state.data = []
         })
             .addCase(getAllabs.fulfilled, (state, action) => {
+                
                 state.loading = false;
                 state.data.push(action.payload)
             })

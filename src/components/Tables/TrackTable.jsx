@@ -1,130 +1,115 @@
 import React, { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+
 import {
-  fetchTrackWidthPost,
-  getSingleTrackWidthData,
- 
-} from "../../services/TracwidthService";
-import Modal from "../Modals/Modal";
+  GetTrackData,
+  getTrackSearch,
+  SingleTrackData,
+} from "../../services/DowellService";
+import TrackModal from "../Modals/DowellModal";
+import Pagination from "@mui/material/Pagination";
 
-const TrackTable = () => {
-  const [ids, setIds] = useState("");
-  const [track, setTrack] = useState("");
-  const [BareDrawingNumber, setBareDrawingNumber] = useState("");
-  const [OtoO, setOtoO] = useState("");
-  const [addState, setAddState] = useState("");
-  const [OAII, setOAII] = useState("");
-
-  const [showmodal, setShowModal] = useState(false);
-  const [showdeletemodal, setShowDeleteModal] = useState(false);
+const DowellTable = () => {
+  const [page, setPage] = useState(1);
+  const handleChange = (event, value) => {
+    setPage(value);
+  };
+  const [modal, setModal] = useState(false);
+  const [ids, setIds] = useState();
+  const [search, setSearch] = useState("");
+  const [showDeleteModal, setShowdeleteModal] = useState(false);
+  const [updateState, setUpdateState] = useState(false);
   const dispatch = useDispatch();
-
-  const { data, loading } = useSelector(
-    (state) => state.TracWidthReducer
+  const { loading, data, skipCount } = useSelector(
+    (state) => state.DowellReducer
   );
-
   useEffect(() => {
-    dispatch(fetchTrackWidthPost());
-    
-  }, []);
-  const updatehandler = (id) => {
-    dispatch(getSingleTrackWidthData(id));
-    setShowModal(true);
-    setAddState(false);
-
-    if (!loading) {
-    }
-
-    setIds(id);
-  };
-
-  const deleteHandler = (e, id) => {
-    setIds(id);
-    setShowModal(true)
-    setShowDeleteModal(true)
-    // dispatch(TrackWidthDelete(id));
-    //
-  };
+    dispatch(GetTrackData(page));
+  }, [page]);
 
   const AddDataHandler = () => {
-    setShowModal(true);
-    setAddState(true);
+    setUpdateState(false);
+    setModal(true);
+  };
+
+  const deleteHandler = (id) => {
+    setModal(true);
+    setShowdeleteModal(true);
+    setIds(id);
+  };
+
+  const updatehandler = (id) => {
+    dispatch(SingleTrackData(id));
+    setUpdateState(true);
+    setModal(true);
+  };
+  const handleSearch = () => {
+    dispatch(getTrackSearch(search));
   };
 
   if (loading) {
-    return <div>Loading... </div>;
+    return <div>Loading..</div>;
   }
-
   if (data) {
+    console.log(page);
     return (
       <div>
+        <Pagination page={page} onChange={handleChange} count={3} />
+
         <button onClick={() => AddDataHandler()}>Add Data</button>
-        <Link to='/'><button>Back</button></Link>
+        <input
+          type="text"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="search"
+        ></input>
+        <button onClick={() => handleSearch()}>Search</button>
         <table>
           <tr>
-            <th>Track</th>
-            <th>BareDrawingNumber</th>
-            <th>OtoO</th>
-            <th>OAII</th>
+            <th>Dowell</th>
+            <th>DowelPN</th>
+            <th>FTOff</th>
+            <th>Spacing</th>
           </tr>
+          {data[0].data.map((res) => (
+            <React.Fragment key={res._id}>
+              <tr>
+                <td>{res.Dowel}</td>
+                <td>{res.DowelPN}</td>
+                <td>{res.FTOff}</td>
+                <td>{res.Spacing}</td>
 
-          {data.map((res) => (
-            <React.Fragment>
-              {res.data.map((r) => (
-                <React.Fragment key={r._id}>
-                  <tr>
-                    <td>{r.Track}</td>
-                    <td>{r.BareDrawingNumber}</td>
-                    <td>{r.OtoO}</td>
-                    <td>{r.OAII}</td>
-                    <button
-                      onClick={() => updatehandler(r._id)}
-                      style={{ cursor: "pointer" }}
-                    >
-                      update
-                    </button>
-                    <button
-                      onClick={(e) => deleteHandler(e, r._id)}
-                      style={{ cursor: "pointer" }}
-                    >
-                      delete
-                    </button>
-                    {/* <button onClick={() => AddsDataHandler(r._id)}>Add single</button> */}
-                  </tr>
-                </React.Fragment>
-              ))}
+                <button
+                  onClick={() => updatehandler(res._id)}
+                  style={{ cursor: "pointer" }}
+                >
+                  update
+                </button>
+                <button
+                  onClick={(e) => deleteHandler(res._id)}
+                  style={{ cursor: "pointer" }}
+                >
+                  delete
+                </button>
+              </tr>
             </React.Fragment>
           ))}
-        </table>
-
-        {showmodal ? (
-          <div>
-            <Modal
+          {modal ? (
+            <DowellModal
               id={ids}
-              addState={addState}
-              setShowModal={setShowModal}
-              setTrack={setTrack}
-              setBareDrawingNumber={setBareDrawingNumber}
-              setOAII={setOAII}
-              setOtoO={setOtoO}
-              track={track}
-              BareDrawingNumber={BareDrawingNumber}
-              OtoO={OtoO}
-              OAII={OAII}
-              showdeletemodal={showdeletemodal}
-              setShowDeleteModal={setShowDeleteModal}
-            />
-          </div>
-        ) : (
-          <React.Fragment></React.Fragment>
-        )}
-
-     
-      
+              setModal={setModal}
+              showDeleteModal={showDeleteModal}
+              setShowdeleteModal={setShowdeleteModal}
+              updateState={updateState}
+              setUpdateState={setUpdateState}
+            ></DowellModal>
+          ) : (
+            <div></div>
+          )}
+        </table>
       </div>
     );
   }
 };
 
-export default TrackTable;
+export default DowellTable;

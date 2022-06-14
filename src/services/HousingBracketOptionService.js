@@ -6,8 +6,8 @@ import axios from "axios";
 
 export const fetchHousingBracketOption = createAsyncThunk(
   'housingbracketoption',
-  async ()=>{
-      const {data} = await axios.get('/api/housingbracketoptiondata')
+  async (page)=>{
+      const {data} = await axios.get(`/api/housingbracketoptiondata?Page=${page}`)
      return data
   }
 )
@@ -47,7 +47,7 @@ async (data)=>{
 }
 )
 
-export const getSearch = createAsyncThunk('getsearch',
+export const getSearched = createAsyncThunk('getSearched',
     async (search) => {
    const {data} = await axios.get(`/api/gsearch?searchQ=${search}`)
         return data
@@ -75,6 +75,7 @@ const HousingBracketOptionSlice = createSlice({
    extraReducers: (builder)=>{
        builder.addCase(fetchHousingBracketOption.pending,(state,action)=>{
            state.loading = true
+           state.data = []
        })
        .addCase(fetchHousingBracketOption.fulfilled,(state,action)=>{
            state.loading = false;
@@ -103,12 +104,12 @@ const HousingBracketOptionSlice = createSlice({
            state.loading = false;
            
        })
-       .addCase(getSearch.pending, (state, action) => {
+       .addCase(getSearched.pending, (state, action) => {
         state.loading = true
         state.data =[]
         
     })
-    .addCase(getSearch.fulfilled, (state, action) => {
+    .addCase(getSearched.fulfilled, (state, action) => {
         state.data.push(action.payload)
         state.loading = false;
 })

@@ -1,18 +1,24 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { GetHalfOption, SingleHalfOptionData } from '../../services/HalfOptionServices'
+import { GetHalfOption, getmSearch, SingleHalfOptionData } from '../../services/HalfOptionServices'
 import HalfOptionModal from '../Modals/HalfOptionModal'
+import Pagination from '@mui/material/Pagination';
 
 const HalfOptionTable = () => {
+  const [page, setPage] = useState(1);
+  const handleChange = (event, value) => {
+    setPage(value)
+  };
     const [modal, setModal] = useState(false)
+    const [search, setSearch] = useState('')
     const [ids, setIds] = useState()
     const [showDeleteModal, setShowdeleteModal] = useState(false)
     const [updateState,setUpdateState] = useState(false)
     const dispatch = useDispatch()
     const {loading,data} = useSelector((state)=> state.HalfOptionReducer)
     useEffect(() => {
-        dispatch(GetHalfOption())
-    }, [])
+        dispatch(GetHalfOption(page))
+    }, [page])
     
 
     const AddDataHandler = () => {
@@ -32,7 +38,9 @@ const HalfOptionTable = () => {
         setUpdateState(true)
         setModal(true)
     }
-
+    const handleSearch = () => {
+      dispatch(getmSearch(search))
+    }
     
     if (loading) {
         return <div>Loading..</div>
@@ -40,9 +48,10 @@ const HalfOptionTable = () => {
     if (data) {
         return (
             <div>
-
+<Pagination page={page} onChange={handleChange} count={3}/>
             <button onClick={() => AddDataHandler()}>Add Data</button>
-            
+            <input type="text" value={search} onChange={(e) => setSearch(e.target.value)} />
+<button onClick={()=>handleSearch()}>Search</button>
             <table>
                       <tr>
                         <th>HalfOption</th>

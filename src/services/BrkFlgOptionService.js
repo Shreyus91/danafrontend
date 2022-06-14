@@ -5,7 +5,7 @@ import axios from "axios";
 // get Brake Flange option data
 
 export const GetBrkFlgOptionData = createAsyncThunk('/getflangeoption/data', async (page) => {
-    const { data } = await axios.get('/api/brkflgoptiondata?Pages=${page}')
+    const { data } = await axios.get(`/api/brkflgoptiondata?Pages=${page}`)
     return data
 })
 
@@ -57,7 +57,7 @@ const BrkFlgOptionSlice = createSlice({
     extraReducers: (builder) => {
         builder.addCase(GetBrkFlgOptionData.pending, (state, action) => {
             state.loading = true;
-            
+            state.data=[]
         })
             .addCase(GetBrkFlgOptionData.fulfilled, (state, action) => {
                 state.loading = false;
